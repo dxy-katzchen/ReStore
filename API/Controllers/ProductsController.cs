@@ -6,9 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
-[ApiController]
-[Route("[controller]")]
-public class ProductsController:ControllerBase
+
+public class ProductsController: BaseApiController
 {
    private readonly StoreContext _context;
     public ProductsController(StoreContext context)
@@ -25,7 +24,8 @@ public class ProductsController:ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<Product>> GetProduct(int id)
     {
-      return await _context.Products.FindAsync(id);
-        
+        var Product= await _context.Products.FindAsync(id);
+        if(Product==null) return NotFound();
+        return Product;
     }
 }
